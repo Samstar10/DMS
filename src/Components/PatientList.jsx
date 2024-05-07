@@ -32,6 +32,18 @@ export default function PatientList() {
         }
     }, [patientName])
 
+    function handleDelete(documentId){
+        fetch(`http://localhost:5555/delete/${documentId}`, {
+            method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            handleSearch(patientName)
+        })
+        .catch(err => console.log(err))
+    }
+
     return (
         <div className="py-6 px-8 ">
             <div className="flex gap-5 mb-5">
@@ -53,7 +65,10 @@ export default function PatientList() {
                         <div className="flex justify-between shadow-lg mb-2 px-4 py-4 rounded-xl hover:shadow-xl">
                             <p className="text-[#555] font-semibold uppercase">{patient.patient_name}</p>
                             <p className="text-[#555] font-semibold uppercase">{patient.document_category}</p>
-                            <button className="bg-[#115987] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]">View</button>
+                            <div className="flex gap-2">
+                                <button className="bg-[#115987] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]">View</button>
+                                <button className="bg-[#d9534f] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]]" onClick={() => handleDelete(patient.id)}>Delete</button>
+                            </div>
                         </div>
                     </li>
                 ))) : <p className="text-[#555] font-semibold">No patient found</p>}
