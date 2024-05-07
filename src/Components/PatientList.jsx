@@ -52,6 +52,7 @@ export default function PatientList() {
                     <li key={patient.id} className="py-3">
                         <div className="flex justify-between shadow-lg mb-2 px-4 py-4 rounded-xl hover:shadow-xl">
                             <p className="text-[#555] font-semibold uppercase">{patient.patient_name}</p>
+                            <p className="text-[#555] font-semibold uppercase">{patient.document_category}</p>
                             <button className="bg-[#115987] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]">View</button>
                         </div>
                     </li>
