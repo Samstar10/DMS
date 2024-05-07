@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import ConfirmationModal from "./DeleteConfirmationModal";
 
 export default function PatientList() {
     const [patientName, setPatientName] = useState('')
     const [patients, setPatients] = useState([])
     const [typingTimeout, setTypingTimeout] = useState(null)
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [selectedPatient, setSelectedPatient] = useState(null)
 
     function handleSearch(name) {
 
@@ -44,6 +47,24 @@ export default function PatientList() {
         .catch(err => console.log(err))
     }
 
+    function showDeleteModal(patient) {
+        setSelectedPatient(patient)
+        setIsModalVisible(true)
+    }
+
+    function confirmDelete() {
+        if (selectedPatient) {
+            handleDelete(selectedPatient.id)
+            setIsModalVisible(false)
+            setSelectedPatient(null)
+        }
+    }
+
+    function cancelDelete() {
+        setIsModalVisible(false)
+        setSelectedPatient(null)
+    }
+
     return (
         <div className="py-6 px-8 ">
             <div className="flex gap-5 mb-5">
@@ -67,12 +88,19 @@ export default function PatientList() {
                             <p className="text-[#555] font-semibold uppercase">{patient.document_category}</p>
                             <div className="flex gap-2">
                                 <button className="bg-[#115987] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]">View</button>
-                                <button className="bg-[#d9534f] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]]" onClick={() => handleDelete(patient.id)}>Delete</button>
+                                <button className="bg-[#d9534f] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]]" onClick={() => showDeleteModal(patient)}>Delete</button>
                             </div>
                         </div>
                     </li>
                 ))) : <p className="text-[#555] font-semibold">No patient found</p>}
             </ul>
+
+            <ConfirmationModal
+                isVisible={isModalVisible}
+                onConfirm={confirmDelete}
+                onCancel={cancelDelete}
+                patientName={selectedPatient?.patient_name}
+            />
         </div>
     );
 }
