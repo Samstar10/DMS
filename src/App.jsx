@@ -1,87 +1,57 @@
-import { useState } from 'react'
-import './App.css'
+// import { useState } from 'react';
+// import axios from 'axios';
+import { Routes, Route } from 'react-router-dom'
+import Home from './Components/Home';
 
-function App() {
+function DocumentUpload() {
+    // const [files, setFiles] = useState([]);
 
-  const [selectedFiles, setSelectedFiles] = useState([])
+    // const onFileChange = event => {
+    //     // This will store the FileList into the state
+    //     setFiles(event.target.files);
+    // };
 
-  function handleFileChange(e) {
-    // console.log(e.target.files)
-    setSelectedFiles([...e.target.files])
-  }
+    // const onFileUpload = () => {
+    //     const formData = new FormData();
+        
+    //     // Loop through the files and append each to formData
+    //     for (let i = 0; i < files.length; i++) {
+    //         formData.append("document", files[i]);
+    //     }
 
-  function handleSubmit(e) {
-    e.preventDefault()
+    //     // Post formData to the backend API
+    //     axios.post("http://localhost:5555/upload", formData, {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data'
+    //         }
+    //     })
+    //     .then(response => {
+    //         console.log('Files uploaded successfully:', response);
+    //         alert('Files uploaded successfully!');
+    //     })
+    //     .catch(error => {
+    //         console.error('Error uploading files:', error);
+    //         alert('Error uploading files');
+    //     });
+    // };
 
-    console.log(selectedFiles)
+    // return (
+    //     <div>
+    //         <input type="file" multiple onChange={onFileChange} />
+    //         <button onClick={onFileUpload}>
+    //             Upload Files
+    //         </button>
+    //     </div>
+    // );
 
-    if (selectedFiles.length === 0) {
-      alert('Please select a file')
-      return
-    }
-
-    // const formData = new FormData()
-    const formData = {}
-    formData["files"] = selectedFiles
-
-    for (let i = 0; i < selectedFiles.length; i++) {
-      // console.log(selectedFiles[i])
-      // formData.append('files', selectedFiles[i])
-    }
-    
-    // for (let pair of formData.entries()) {
-    //   console.log(pair[0] + ', ' + pair[1].name)
-    // }
-    // console.log(formData.get('files'))
-    // console.log(selectedFiles)
-
-    console.log(formData)
-
-    fetch('http://localhost:5555/upload', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(res => res.json())
-    .then(data => console.log(data))
-    .catch(err => console.log(err))
-  }
-
-  // const [file, setFile] = useState()
-
-  // function handleChange(e) {
-  //   setFile(e.target.files[0])
-  // }
-
-  // function handleSubmit(e){
-  //   e.preventDefault()
-    
-  //   const formData = new FormData()
-  //   formData.append('file', file)
-
-  //   fetch('http://localhost:5555/upload', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data'
-  //     },
-  //     body: formData
-  //   })
-  //   .then(res => res.json())
-  //   .then(data => console.log(data))
-  //   .catch(err => console.log(err))
-  // }
-
-  return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <input type="file" onChange={handleFileChange} name="files" multiple />
-        <button type="submit">Upload</button>
-      </form>
-    </>
-  )
+    return (
+        <div className=''>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </div>
+    )
 
 }
 
-export default App
+export default DocumentUpload;
