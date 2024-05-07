@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import ConfirmationModal from "./DeleteConfirmationModal";
 import PatientDetailsModal from "./DetailsModal";
+import { NavLink } from "react-router-dom";
 
 export default function PatientList() {
     const [patientName, setPatientName] = useState('')
     const [patients, setPatients] = useState([])
+    const [documentCategory, setDocumentCategory] = useState('')
     const [typingTimeout, setTypingTimeout] = useState(null)
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false)
     const [selectedPatient, setSelectedPatient] = useState(null)
 
-    function handleSearch(name) {
+    function handleSearch(name, documentCategory) {
 
         const queryParams = new URLSearchParams({
-            patient_name: name
+            patient_name: name,
+            document_category: documentCategory
         }).toString();
 
         fetch(`http://localhost:5555/search?${queryParams}`)
@@ -27,7 +30,7 @@ export default function PatientList() {
         //     clearTimeout(typingTimeout)
         // }
         const timeout = setTimeout(() => {
-            handleSearch(patientName)
+            handleSearch(patientName, documentCategory)
         }, 500)
 
         setTypingTimeout(timeout)
@@ -35,7 +38,7 @@ export default function PatientList() {
         return () => {
             clearTimeout(timeout)
         }
-    }, [patientName])
+    }, [patientName, documentCategory])
 
     function handleDelete(documentId){
         fetch(`http://localhost:5555/delete/${documentId}`, {
@@ -44,7 +47,7 @@ export default function PatientList() {
         .then(res => res.json())
         .then(data => {
             console.log(data)
-            handleSearch(patientName)
+            handleSearch(patientName, documentCategory)
         })
         .catch(err => console.log(err))
     }
@@ -86,6 +89,12 @@ export default function PatientList() {
                     type="text" placeholder="Search by name" 
                     className="bg-gray-200 px-4 py-3 rounded-xl w-1/2 focus:outline-none text-[#555]" 
                 />
+                <input 
+                    value={documentCategory} 
+                    onChange={(e) => setDocumentCategory(e.target.value)} 
+                    type="text" placeholder="Search by document category" 
+                    className="bg-gray-200 px-4 py-3 rounded-xl w-1/2 focus:outline-none text-[#555]" 
+                />
                 <button 
                     className="bg-[#115987] text-white px-10 py-3 rounded-xl font-extralight text-sm hover:text-[#d6d1d1]"
                     onClick={handleSearch}
@@ -96,11 +105,14 @@ export default function PatientList() {
                 {patients.length > 0 ? (patients.map(patient => (
                     <li key={patient.id} className="py-3">
                         <div className="flex justify-between shadow-lg mb-2 px-4 py-4 rounded-xl hover:shadow-xl">
-                            <p className="text-[#555] font-semibold uppercase">{patient.patient_name}</p>
-                            <p className="text-[#555] font-semibold uppercase">{patient.document_category}</p>
+                            <p className="text-[#555] font-semibold uppercase w-1/5">{patient.patient_name}</p>
+                            <p className="text-[#555] font-semibold uppercase w-1/5">{patient.document_category}</p>
+                            <p className="text-[#555] font-normal w-1/5 overflow-hidden whitespace-nowrap text-ellipsis">{patient.file_name}</p>
+                            <p className="text-[#555] font-thin uppercase w-1/5">{patient.created_at}</p>
                             <div className="flex gap-2">
-                                <button className="bg-[#115987] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]" onClick={() => showDetailsModal(patient)}>View</button>
-                                <button className="bg-[#d9534f] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]]" onClick={() => showDeleteModal(patient)}>Delete</button>
+                                <NavLink to={`/edit/${patient.id}`}><button className="bg-[#3dddb0] text-white px-10 rounded-lg font-extralight text-sm hover:shadow-lg py-1">Edit</button></NavLink>
+                                <button className="bg-[#115987] text-white px-10 rounded-lg font-extralight text-sm hover:shadow-lg" onClick={() => showDetailsModal(patient)}>View</button>
+                                <button className="bg-[#d9534f] text-white px-10 rounded-lg font-extralight text-sm hover:shadow-lg" onClick={() => showDeleteModal(patient)}>Delete</button>
                             </div>
                         </div>
                     </li>

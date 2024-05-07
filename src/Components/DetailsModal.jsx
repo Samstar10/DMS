@@ -1,3 +1,5 @@
+import VersionHistory from "./VersionHistory";
+
 export default function PatientDetailsModal({ isVisible, onClose, patient, onDelete }) {
     if (!isVisible || !patient) return null;
 
@@ -15,6 +17,7 @@ export default function PatientDetailsModal({ isVisible, onClose, patient, onDel
                         <p className="font-semibold mb-4 uppercase">Document: {patient.document_category}</p>
                         <p className="font-normal text-xs mb-4 uppercase">Created: {patient.created_at}</p>
                         <p className="font-normal text-xs mb-4 uppercase">Modified: {patient.updated_at}</p>
+                        <VersionHistory documentId={patient.id} />
                     </div>
                     {patient.file_path ? (
                         <iframe
