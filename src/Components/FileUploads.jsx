@@ -57,7 +57,7 @@ export default function FileUpload() {
                     <h1 className="text-3xl font-bold text-[#555]">DMS</h1>
                     <p className="text-xs text-[#555]">DOCUMENT MANAGEMENT SYSTEM</p>
                 </div>
-                <NavLink to="/"><button className="bg-[#115987] text-white px-4 py-3 rounded-3xl font-extralight text-sm hover:text-[#d6d1d1] hover:shadow-xl">Go Back</button></NavLink>
+                <NavLink to="/"><button className="bg-[#115987] text-white px-4 py-3 rounded-3xl font-extralight text-sm hover:text-[#d6d1d1] hover:shadow-xl">Cancel</button></NavLink>
             </div>
             <div className="py-6 px-8 h-screen w-full flex flex-col justify-center items-center">
                 <div className="w-2/3 h-2/3 flex flex-col bg-[#006da0] p-10 rounded-xl shadow-2xl">

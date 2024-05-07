@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import ConfirmationModal from "./DeleteConfirmationModal";
+import PatientDetailsModal from "./DetailsModal";
 
 export default function PatientList() {
     const [patientName, setPatientName] = useState('')
     const [patients, setPatients] = useState([])
     const [typingTimeout, setTypingTimeout] = useState(null)
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false)
     const [selectedPatient, setSelectedPatient] = useState(null)
 
     function handleSearch(name) {
@@ -65,6 +67,16 @@ export default function PatientList() {
         setSelectedPatient(null)
     }
 
+    function showDetailsModal(patient) {
+        setSelectedPatient(patient)
+        setIsDetailsModalVisible(true)
+    }
+
+    function closeDetailsModal() {
+        setIsDetailsModalVisible(false)
+        setSelectedPatient(null)
+    }
+
     return (
         <div className="py-6 px-8 ">
             <div className="flex gap-5 mb-5">
@@ -87,7 +99,7 @@ export default function PatientList() {
                             <p className="text-[#555] font-semibold uppercase">{patient.patient_name}</p>
                             <p className="text-[#555] font-semibold uppercase">{patient.document_category}</p>
                             <div className="flex gap-2">
-                                <button className="bg-[#115987] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]">View</button>
+                                <button className="bg-[#115987] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]" onClick={() => showDetailsModal(patient)}>View</button>
                                 <button className="bg-[#d9534f] text-white px-10 rounded-lg font-extralight text-sm hover:text-[#d6d1d1]]" onClick={() => showDeleteModal(patient)}>Delete</button>
                             </div>
                         </div>
@@ -100,6 +112,13 @@ export default function PatientList() {
                 onConfirm={confirmDelete}
                 onCancel={cancelDelete}
                 patientName={selectedPatient?.patient_name}
+            />
+
+            <PatientDetailsModal
+                isVisible={isDetailsModalVisible}
+                onClose={closeDetailsModal}
+                patient={selectedPatient}
+                onDelete={() => handleDelete(selectedPatient.id)}
             />
         </div>
     );
